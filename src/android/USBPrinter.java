@@ -48,8 +48,7 @@ public class USBPrinter extends ZebraPlugin {
                 discoveredPrinterUsb = handler.printers.get(0);
                 if (mUsbManager.hasPermission(discoveredPrinterUsb.device)) {
                     try {
-                        printSimple();
-                        //printOverUSB(message);
+                        printOverUSB(message);
                     } catch (Exception e) {
                         throw new RuntimeException("Zebra plugin exception: " + Arrays.toString(e.getStackTrace()));
                     }
@@ -79,27 +78,16 @@ public class USBPrinter extends ZebraPlugin {
         return ZebraImageFactory.getImage(mBitmap);
     }
 
-    private void printSimple() {
-        Connection conn = null;
-        try {
-            Connection conn = discoveredPrinterUsb.getConnection();
-            conn.open();
-            conn.write("~WC".getBytes());
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (ConnectionException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private void printOverUSB(byte[] bitmapByteArray)
             throws ConnectionException, ZebraPrinterLanguageUnknownException, IOException, RuntimeException {
         Connection connection = null;
         try {
+            Connection conn = discoveredPrinterUsb.getConnection();
+            conn.open();
+            conn.write("~WC".getBytes());
+            conn.close();
+            if (1==1) return;
+
             connection = discoveredPrinterUsb.getConnection();
             connection.open();
             if (connection.isConnected()) {
