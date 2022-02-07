@@ -85,6 +85,9 @@ public class USBPrinter extends ZebraPlugin {
             connection = discoveredPrinterUsb.getConnection();
             connection.open();
             if (connection.isConnected()) {
+
+                connection.write("~WC".getBytes());
+
                 ZebraPrinter printer = null;
                 try {
                     printer = ZebraPrinterFactory.getInstance(connection);
